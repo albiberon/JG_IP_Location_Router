@@ -42,6 +42,10 @@ require(['jquery', 'domReady!'], function ($) {
         }
 
         }, "jsonp");
+    
+    // learn generating pop up dialog
+    //https://www.w3schools.com/howto/tryit.asp?filename=tryhow_css_modal2
+    // https://www.sitepoint.com/14-jquery-modal-dialog-boxes/
         
 
 });
