@@ -1,20 +1,47 @@
 
 require(['jquery', 'domReady!'], function ($) {
 
-function ipLookUp () {
-  $.ajax('http://ip-api.com/json')
-  .then(
-      function success(response) {
-          console.log('User\'s Location Data is ', response);
-          console.log('User\'s Country', response.country);
-      },
 
-      function fail(data, status) {
-          console.log('Request failed.  Returned status of',
-                      status);
-      }
-  );
-}
-ipLookUp()
+    var userVisitedAddress = window.location.origin;
+
+    var Websites = {
+        "Interinational": "https://www.junglegym.com",
+        "NL": "https://www.junglegym.nl",
+        "EE": "https://www.junglegym.ee",
+        "AT": "https://www.junglegym.at",
+        "BE": "https://www.junglegym.be",
+        "DE": "https://www.junglegym.de",
+        "IT": "https://www.junglegym.it",
+        "IE": "https://www.junglegym.ie",
+        "LV": "https://www.junglegym.lv",
+        "LU": "https://www.junglegym.lu",
+        "PT": "https://www.junglegym.pt",
+        
+
+        };
+
+
+        $.get("https://ipinfo.io", function(response) {
+          
+        
+        if (Websites.hasOwnProperty(response.country)){
+            console.log(
+                `
+                Howdy ${response.city}!
+                You are on a wrong page.
+                The right address is:
+                ${Websites[response.country]}
+                `
+            );
+        } else {
+            `
+            Howdy ${response.city}!
+            You better visit 
+            ${Websites['International']}
+            `
+        }
+
+        }, "jsonp");
+        
 
 });
