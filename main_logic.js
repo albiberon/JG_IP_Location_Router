@@ -1,3 +1,6 @@
+
+require(['jquery', 'domReady!'], function ($) {
+
 function ipLookUp () {
   $.ajax('http://ip-api.com/json')
   .then(
@@ -13,3 +16,5 @@ function ipLookUp () {
   );
 }
 ipLookUp()
+
+});
