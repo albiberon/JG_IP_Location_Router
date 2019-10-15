@@ -33,7 +33,7 @@ var Websites = {
 
 
 
-    var landedSite = window.location.origin;
+    var landedSite = window.location.hostname;
     var landedSiteCountry = landedSite.slice(-2).toUpperCase();
 
     if( landedSiteCountry === 'UK'){
