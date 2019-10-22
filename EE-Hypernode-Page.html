@@ -457,6 +457,8 @@
         UK: "https://www.junglegym.co.uk"
     };
 
+    
+
     var landedSite = window.location.hostname;
     var landedSiteCountry = landedSite.slice(-2).toUpperCase();
 
@@ -465,10 +467,11 @@
     }
 
     var visitorCountry;
-    var visitorCity;
+    var visitorCountryName;
 
     // Get the modal
-    var modal = document.getElementById("myModal");
+    //var modal = document.getElementById("myModalPopUp");
+    
 
     // Get the closeButton ID that closes the modal
     var closeButton = document.getElementById("#closeButton");
@@ -486,7 +489,8 @@
                 success: function (location) {
                     visitorCountry = location.country_code;
 
-                    visitorCity = location.city;
+                    visitorCountryName = location.country_name;
+                    console.log(visitorCountryName)
 
 
                     // If landed site is other than where user is from
@@ -506,9 +510,10 @@
                         if (Websites.hasOwnProperty(visitorCountry)) {
                             linkToShow = Websites[visitorCountry];
 
-                            $("#routingInfoHeader").text("Howdy " + visitorCity + "!");
+                            $(".flag-header-row img").attr("src",('https://www.countryflags.io/'+ visitorCountry + '/flat/24.png'));
+                            $("#routingInfoHeader").text("You are from " + visitorCountryName + "!");
                             $("#routingInfoText").text(
-                                "You are on a wrong page! Check out the right link below"
+                                "Go to"
                             );
                             // the green button takes the visitor to the right website
                             $("#routingLink").click(function () {
