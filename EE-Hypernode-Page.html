@@ -426,38 +426,39 @@
 
 
 <!-- Script for visitor routing -->
+
 <script>
 
     var Websites = {
-        INT: "https://www.junglegym.com",
-        NL: "https://www.junglegym.nl",
-        DK: "https://www.junglegym.dk",
-        EE: "https://www.junglegym.ee",
-        ES: "https://www.junglegym.es",
-        FR: "https://www.junglegym.fr",
-        GR: "https://www.junglegym.gr",
-        IS: "https://www.junglegym.is",
-        MK: "https://www.junglegym.mk",
-        AT: "https://www.junglegym.at",
-        BE: "https://www.junglegym.be",
-        DE: "https://www.junglegym.de",
-        IT: "https://www.junglegym.it",
-        IE: "https://www.junglegym.ie",
-        LV: "https://www.junglegym.lv",
-        LU: "https://www.junglegym.lu",
-        PT: "https://www.junglegym.pt",
-        CH: "https://www.junglegym.ch",
-        SI: "https://www.junglegym.si",
-        ZA: "https://www.junglegym.co.za",
-        NO: "https://www.junglegym.co.no",
-        FI: "https://www.junglegym.fi",
-        SE: "https://www.junglegym.se",
-        PL: "https://www.junglegym.pl",
-        UA: "https://www.junglegym.ua",
-        UK: "https://www.junglegym.co.uk"
+        INT: ["https://www.junglegym.com", "International"],
+        NL: ["https://www.junglegym.nl", "Nederland"],
+        DK: ["https://www.junglegym.dk", "Danmark"],
+        EE: ["https://www.junglegym.ee", "Esti"],
+        ES: ["https://www.junglegym.es", "España"],
+        FR: ["https://www.junglegym.fr", "France"],
+        GR: ["https://www.junglegym.gr", "Ελλάδα"],
+        IS: ["https://www.junglegym.is", "Ísland"],
+        MK: ["https://www.junglegym.mk", "Makedonija"],
+        AT: ["https://www.junglegym.at", "Österreich"],
+        BE: ["https://www.junglegym.be", "Belgium"],
+        DE: ["https://www.junglegym.de", "Deutschland"],
+        IT: ["https://www.junglegym.it", "Italia"],
+        IE: ["https://www.junglegym.ie", "Ireland"],
+        LV: ["https://www.junglegym.lv", "Latvija"],
+        LU: ["https://www.junglegym.lu", "Luxemburg"],
+        PT: ["https://www.junglegym.pt", "Portugal"],
+        CH: ["https://www.junglegym.ch", "Swiss"],
+        SI: ["https://www.junglegym.si", "Slovenija"],
+        ZA: ["https://www.junglegym.co.za", "South Africa"],
+        NO: ["https://www.junglegym.co.no", "Norge"],
+        FI: ["https://www.junglegym.fi", "Suomi"],
+        SE: ["https://www.junglegym.se", "Sverige"],
+        PL: ["https://www.junglegym.pl", "Polska"],
+        UA: ["https://www.junglegym.ua", "Україна"],
+        UK: ["https://www.junglegym.co.uk", "UK"]
     };
 
-    
+
 
     var landedSite = window.location.hostname;
     var landedSiteCountry = landedSite.slice(-2).toUpperCase();
@@ -471,7 +472,7 @@
 
     // Get the modal
     //var modal = document.getElementById("myModalPopUp");
-    
+
 
     // Get the closeButton ID that closes the modal
     var closeButton = document.getElementById("#closeButton");
@@ -501,42 +502,61 @@
 
                         // When the user clicks on (x), close the modal
                         $("#closeButton").click(function () {
-                            $("#myModalPopUp").css("display", "none");
+                            $("#myModalPopUp").remove();
                             //$(".page-wrapper>*:not(#myModalPopUp)").css("filter", "none");
                         });
+
+                        $(".flag-header-row img").attr("src", ('https://www.countryflags.io/' + visitorCountry + '/flat/24.png'));
+                        $("#routingInfoHeader").text("You are from " + visitorCountryName + "!");
+                        $("#routingInfoText").text("Go to > ");
 
                         var linkToShow = "";
                         // If the user is from a country we have a website for
                         if (Websites.hasOwnProperty(visitorCountry)) {
-                            linkToShow = Websites[visitorCountry];
 
-                            $(".flag-header-row img").attr("src",('https://www.countryflags.io/'+ visitorCountry + '/flat/24.png'));
-                            $("#routingInfoHeader").text("You are from " + visitorCountryName + "!");
-                            $("#routingInfoText").text(
-                                "Go to"
-                            );
+                            linkToShow = Websites[visitorCountry][0];
                             // the green button takes the visitor to the right website
                             $("#routingLink").click(function () {
                                 window.open(linkToShow, '_self');
                             });
-
-                            $("#routingLink").text(linkToShow.slice(8));
+                            // The text on the button is replaced with the country specific Jungle Gym name
+                            $("#routingLink").text("Jungle Gym " + Websites[visitorCountry][1]);
 
                             //.com website is suggested if the user is from a country we do not
                             // have a dedicated website for
                         } else {
-                            linkToShow = Websites.INT;
-                            $("#routingInfoHeader").text("Howdy " + visitorCity + "!");
-                            $("#routingInfoText").text(
-                                "Please visit our international website for the acurate products and prices."
-                            );
-                            $("#routingLink").text(linkToShow.slice(8));
+                            // Link to show is replaced with www.junglegym.com
+                            linkToShow = Websites[INT][0];
+
+                            $("#routingLink").text("Jungle Gym International");
 
                             //green button takes the user to the international website.
                             $("#routingLink").click(function () {
                                 window.open(linkToShow, '_self');
                             });
                         }
+
+
+                        // $(window).scroll(function () {
+                        //     if ($(this).scrollTop() > 3000) {
+                        //         //  $("#myModalPopUp").css("display", "none");
+                        //         $("#myModalPopUp").fadeOut(1000);
+                        //     } else {
+                        //         $("#myModalPopUp").css("display", "block");
+                        //     }
+                        // });
+
+                        $(window).scroll(function () {
+                            if ($('body').height() <= ($(window).height() + $(window).scrollTop())) {
+                                $("#myModalPopUp").css("opacity", 0 );
+                            } 
+                            else {
+                                $("#myModalPopUp").css("opacity", 1 );
+                            }
+                        });
+
+
+
                     }
                 }
             });
@@ -551,6 +571,7 @@
     });
 
 </script>
+
 
 <!--Geo Location Pop up related styles-->
 <style>
@@ -569,12 +590,12 @@
 
     /* The Close Button */
     #closeButton {
-        right: 10px;
+        right: 2%;
+        font-weight: 300;
         color: #aaaaaa;
         float: right;
-        font-size: 1.4em;
-        font-weight: bold;
-        position: fixed;
+        font-size: 2.7em;
+        position: absolute;
     }
 
     .close:hover,
@@ -585,6 +606,8 @@
     }
 
     #routingLink {
+        border-radius: 0 !important;
+        margin-top: -5px;
         display: inline-block;
         text-align: center;
         padding: 2px 12px 2px 12px;
@@ -594,7 +617,6 @@
         cursor: pointer;
         font-size: 1;
         font-weight: 600;
-        letter-spacing: 1.1px;
         text-align: center;
         margin-left: 5px;
     }
@@ -613,6 +635,7 @@
         text-align: center;
         display: inline-block;
         margin-right: 5px;
+        font-weight: 300;
     }
 
     .flag-header-row img {
@@ -622,11 +645,11 @@
 
     .flag-header-row {
         display: table;
-        margin: 10px auto -5px auto;
+        margin: -6px auto -6px auto;
     }
 
     .flex-row.text-button-row {
         display: table;
-        margin: 0 auto 10px auto;
+        margin: 0 auto 0 auto;
     }
 </style>
