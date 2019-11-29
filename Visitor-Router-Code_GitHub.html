@@ -1,0 +1,276 @@
+<!-- Modal content -->
+<div id="myModalPopUp" class="modal-content">
+    <span id="closeButton">&times;</span>
+    <div id="flag-messages-container" styles="margin:0 auto;">
+        <div class="flex-row flag-header-row" styles="display:inline-block;">
+            <img src="https://www.countryflags.io/be/flat/24.png" alt="Country flag">
+        </div>
+        <div class="flex-row text-button-row" styles="display:inline-block">
+            <p id="routingInfoHeader" style="color: #282828; display: block; float:left;"></p><br>
+            <p id="routingInfoText" style="color: #282828; display:block; float:left;"></p>
+        </div>
+    </div>
+</div>
+
+<!-- Script for visitor routing -->
+<script>
+
+    var Websites = {
+        INT: ["https://www.junglegym.com", "International"],
+        NL: ["https://www.junglegym.nl", "Nederland"],
+        DK: ["https://www.junglegym.dk", "Danmark"],
+        EE: ["https://www.junglegym.ee", "Esti"],
+        ES: ["https://www.junglegym.es", "España"],
+        FR: ["https://www.junglegym.fr", "France"],
+        GR: ["https://www.junglegym.gr", "Ελλάδα"],
+        IS: ["https://www.junglegym.is", "Ísland"],
+        MK: ["https://www.junglegym.mk", "Makedonija"],
+        AT: ["https://www.junglegym.at", "Österreich"],
+        BE: ["https://www.junglegym.be", "Belgium"],
+        DE: ["https://www.junglegym.de", "Deutschland"],
+        IT: ["https://www.junglegym.it", "Italia"],
+        IE: ["https://www.junglegym.ie", "Ireland"],
+        LV: ["https://www.junglegym.lv", "Latvija"],
+        LU: ["https://www.junglegym.lu", "Luxemburg"],
+        PT: ["https://www.junglegym.pt", "Portugal"],
+        CH: ["https://www.junglegym.ch", "Switzerland"],
+        SI: ["https://www.junglegym.si", "Slovenija"],
+        ZA: ["https://www.junglegym.co.za", "South Africa"],
+        NO: ["https://www.junglegym.co.no", "Norge"],
+        FI: ["https://www.junglegym.fi", "Suomi"],
+        SE: ["https://www.junglegym.se", "Sverige"],
+        PL: ["https://www.junglegym.pl", "Polska"],
+        UA: ["https://www.junglegym.ua", "Україна"],
+        UK: ["https://www.junglegym.co.uk", "UK"]
+    }
+
+    var landedSite = window.location.hostname;
+    var landedSiteCountry = landedSite.slice(-2).toUpperCase();
+    if (landedSiteCountry === "UK") {
+        landedSiteCountry = "GB";
+    }
+    var visitorCountry;
+    var visitorCountryName;
+    var Warnings;
+    // Get the modal
+    //var modal = document.getElementById("myModalPopUp");
+    // Get the closeButton ID that closes the modal
+    var closeButton = document.getElementById("#closeButton");
+    require(["jquery", "domReady!"], function ($) {
+        console.log(`Landed site is ${landedSite}
+             Language of the website is ${landedSiteCountry}`);
+        try {
+            $.ajax({
+                url: "https://geoip-db.com/jsonp",
+                jsonpCallback: "callback",
+                dataType: "jsonp",
+                success: function (location) {
+                    visitorCountry = location.country_code;
+
+                    if (visitorCountry == "NL"){
+                        visitorCountryName = "Nederland";
+                    } else if (visitorCountry == "DE"){
+                        visitorCountryName = "Deutschland";
+                    } else if (visitorCountry=="ES"){
+                        visitorCountryName = "España";
+                    } else if (visitorCountry=="AU"){
+                        visitorCountryName = "Österreich";
+                    } else if (visitorCountry == "BE"){
+                        visitorCountryName = "België | Belgique";
+                    } else if (visitorCountry == "CH"){
+                        visitorCountryName = "Schweiz | Suisse"; 
+                    } else {
+                        visitorCountryName = location.country_name;
+                    }
+
+                    Warnings = {
+                        INT: [`Hey! We think you are in`, `Shop there`],
+                        EN: [`Hey! We think you are in`, `Shop there`],
+                        NL: [`Hé! Wij denken dat je in`, `bent`, `Winkel daar`],
+                        ES: [`!Hola! Creemos que estas en`, `Compra aquí`],
+                        FR: [`Hey! Il semblerait que vous soyez en`, `Shop ici`],
+                        DE: [`Hi! Wir denken, dass du dich in`, `befindest`, `Jetzt shoppen`],
+                    };
+
+                    console.log("lets check " + Warnings.DE[0]);
+
+                    // If landed site is other than where user is from
+                    if (landedSiteCountry !== visitorCountry) {
+                        //Modal Pop up appears when visitor is at the wrong page
+                        $("#myModalPopUp").css("display", "block");
+                        //$(".page-wrapper>*:not(#myModalPopUp)").css("filter", "blur(3px)");
+                        // When the user clicks on (x), close the modal
+                        $("#closeButton").click(function () {
+                            $("#myModalPopUp").remove();
+                            //$(".page-wrapper>*:not(#myModalPopUp)").css("filter", "none");
+                        });
+                        $(".flag-header-row img").attr("src", ('https://www.countryflags.io/' + visitorCountry + '/flat/24.png'));
+                        // $("#routingInfoHeader").text("You are from " + visitorCountryName + "!");
+                        // $("#routingInfoText").text("Go to > ");
+                        var linkToShow = "";
+                        // If the user is from a country we have a website for
+                        if (Websites.hasOwnProperty(visitorCountry)) {
+                            linkToShow = Websites[visitorCountry][0];
+                            // the green button takes the visitor to the right website
+                            $("#routingInfoText").click(function () {
+                                window.open(linkToShow, '_self');
+                            });
+                            // The text on the button is replaced with the country specific Jungle Gym name
+                            $("#routingLink").text("Jungle Gym " + Websites[visitorCountry][1]);
+
+                            if (visitorCountry == "NL" || visitorCountry == "BE") {
+                                $('#routingInfoHeader').text(`${Warnings.NL[0]} ${visitorCountryName} ${Warnings.NL[1]}`);
+                                $('#routingInfoText').text(Warnings.NL[2]);
+                            }
+                            else if (visitorCountry == "DE" || visitorCountry == "AT") {
+                                $('#routingInfoHeader').text(`${Warnings.DE[0]} ${visitorCountryName} ${Warnings.DE[1]}`);
+                                $('#routingInfoText').text(Warnings.DE[2]);
+                            }
+                            else if (visitorCountry == "FR") {
+                                $('#routingInfoHeader').text(`${Warnings.FR[0]} ${visitorCountryName}`);
+                                $('#routingInfoText').text(Warnings.FR[1]);
+                            }
+                            else if (visitorCountry == "ES") {
+                                $('#routingInfoHeader').text(`${Warnings.ES[0]} ${visitorCountryName}`);
+                                $('#routingInfoText').text(Warnings.ES[1]);
+                            } 
+                            else if (visitorCountry == "LU"){
+                                $('#routingInfoHeader').text(`${Warnings.FR[0]} ${visitorCountryName} | ${Warnings.DE[0]} ${visitorCountryName} ${Warnings.DE[1]}`);
+                                $('#routingInfoText').text(`${Warnings.FR[1]} | ${Warnings.DE[2]}`);
+                            } 
+                            else if (visitorCountry == "CH"){
+                                $('#routingInfoHeader').text(`${Warnings.DE[0]} ${visitorCountryName} ${Warnings.DE[1]} | ${Warnings.FR[0]} ${visitorCountryName}`);
+                                $('#routingInfoText').text(`${Warnings.DE[2]} | ${Warnings.FR[1]}`);
+                            }
+                            else {
+                                $('#routingInfoHeader').text(`${Warnings.EN[0]} ${visitorCounryName}`);
+                                $('#routingInfoText').text(Warnings.EN[1]);
+                            }
+
+                            //.com website is suggested if the user is from a country we do not
+                            // have a dedicated website for
+                        } else {
+                            $('#routingInfoHeader').text(`${Warnings.INT[0]} ${visitorCountryName}`);
+                            $('#routigInfoText').text(Warnings.INT[1]);
+
+                            // Link to show is replaced with www.junglegym.com
+                            linkToShow = Websites.INT[0];
+                            $("#routingLink").text("Jungle Gym " + Websites.INT[1]);
+                            //green button takes the user to the international website.
+                            $("#routingLink").click(function () {
+                                window.open(linkToShow, '_self');
+                            });
+                        }
+
+                    }
+                }
+            });
+        }
+        catch (err) {
+            console.error("Geoip-db.com is not working!");
+            console.error(err.message + ' ' + err.name);
+        }
+    });
+</script>
+
+
+<!--Geo Location Pop up related styles-->
+<style>
+    /* Modal Content */
+    .modal-content {
+        z-index: 9500;
+        display: none;
+        position: fixed;
+        justify-content: center;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background-color: #fefefe;
+        box-shadow: 0 0 0 2px rgb(255, 255, 255), 0.3em 0.3em 1em rgba(0, 0, 0, 0.3);
+    }
+
+    /* The Close Button */
+    #closeButton {
+        top: -5%;
+        right: 2%;
+        font-weight: 300;
+        color: #aaaaaa;
+        float: right;
+        font-size: 2.7em;
+        position: absolute;
+    }
+    #closeButton:hover {
+        cursor: pointer;
+    }
+
+    .close:hover,
+    .close:focus {
+        color: #000;
+        text-decoration: none;
+        cursor: pointer;
+    }
+
+    #routingLink {
+        border-radius: 0 !important;
+        margin-top: -5px;
+        display: inline-block;
+        text-align: center;
+        padding: 2px 12px 2px 12px;
+        background-color: rgb(78, 196, 37);
+        border: none;
+        color: rgb(255, 255, 255);
+        cursor: pointer;
+        font-size: 1;
+        font-weight: 600;
+        text-align: center;
+        margin-left: 5px;
+    }
+
+    #routingInfoHeader {
+        font-weight: 300;
+        font-size: 16px;
+        margin-bottom:0;
+    }
+
+    #routingInfoText {
+        font-size: 16px;
+        display: inline-block;
+        font-weight: 400;
+        text-decoration: underline;
+        cursor: pointer;
+    }
+
+    .flag-header-row{
+        display:inline-block;
+        padding-right: 10px;
+    }
+
+    .flag-header-row img {
+        padding-top: 2px;
+    }
+
+    div#flag-messages-container {
+    max-width: fit-content;
+    margin: 10px auto 0 auto;
+    display: block;
+    }
+
+    .flex-row.text-button-row {
+        display: inline-block;
+    }
+
+    @media(max-width: 800px) {
+        body.catalog-product-view .modal-content {
+            z-index: 8;
+            /* display: none; */
+            position: fixed;
+            justify-content: center;
+            bottom: 106px;
+            left: 0;
+            padding-bottom: 10px;
+            right: 0;
+            background-color: #fefefe;
+            box-shadow: 0 0 0 2px rgb(255, 255, 255), 0.3em 0.3em 1em rgba(0, 0, 0, 0.3);
+        }
+    }
+</style>
