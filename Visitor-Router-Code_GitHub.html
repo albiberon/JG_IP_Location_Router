@@ -89,7 +89,7 @@
                         NL: [`Hé! Wij denken dat je in`, `bent`, `Winkel daar`],
                         ES: [`!Hola! Creemos que estas en`, `Compra aquí`],
                         FR: [`Hey! Il semblerait que vous soyez en`, `Shop ici`],
-                        DE: [`Hi! Wir denken, dass du dich in`, `befindest`, `Jetzt shoppen`],
+                        DE: [`Hi! Wir denken, dass du dich in`, `befindest`, `Jetzt shoppen`]
                     };
 
                     console.log("lets check " + Warnings.DE[0]);
@@ -144,20 +144,20 @@
                             }
                             else {
                                 $('#routingInfoHeader').text(`${Warnings.EN[0]} ${visitorCounryName}`);
-                                $('#routingInfoText').text(Warnings.EN[1]);
+                                $('#routingInfoText').text(`${Warnings.EN[1]}`);
                             }
 
                             //.com website is suggested if the user is from a country we do not
                             // have a dedicated website for
-                        } else {
+                        } 
+                        else {
                             $('#routingInfoHeader').text(`${Warnings.INT[0]} ${visitorCountryName}`);
-                            $('#routigInfoText').text(Warnings.INT[1]);
+                            $('#routigInfoText').text(`${Warnings.INT[1]}`);
 
                             // Link to show is replaced with www.junglegym.com
                             linkToShow = Websites.INT[0];
-                            $("#routingLink").text("Jungle Gym " + Websites.INT[1]);
                             //green button takes the user to the international website.
-                            $("#routingLink").click(function () {
+                            $("#routingInfoText").click(function () {
                                 window.open(linkToShow, '_self');
                             });
                         }
